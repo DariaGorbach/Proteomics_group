@@ -17,7 +17,7 @@ library(VennDiagram)
 ```
 
 ```{r}
-protein_groups_full <-  read_excel("C:/Users/admin/Desktop/протеомные проекты/горох/whole_proteome/Peaa_coat_protgr.xlsx", col_names = T)
+protein_groups_full <-  read_excel("C:/Users/admin/", col_names = T)
 
 colnames(protein_groups_full)
 ```
@@ -96,7 +96,7 @@ ppgC <- ppgC[, 1]
 
 Diagramm construction
 ```{r FISH}
-setwd("C:/Users/admin/Desktop/протеомика/рыба/Venn_diagram/")
+#setwd("C:/Users/admin/")
 
 venn.plot <- venn.diagram(
   x = list(
@@ -125,7 +125,7 @@ venn.plot <- venn.diagram(
 
 
 ```{r, echo = F}
-setwd("C:/Users/admin/Desktop/протеомика/горох/venn_diag/")
+#setwd("C:/Users/admin/")
 
 venn.plot <- venn.diagram(
   x = list(
@@ -156,7 +156,7 @@ venn.plot <- venn.diagram(
 ```
 
 ```{r}
-setwd("C:/Users/admin/Desktop/протеомика/горох/venn_diag/")
+#setwd("C:/Users/admin/")
 
 venn.plot <- venn.diagram(
   x = list(
@@ -187,7 +187,7 @@ venn.plot <- venn.diagram(
 ```
 
 ```{r}
-setwd("C:/Users/admin/Desktop/протеомика/горох/venn_diag/")
+#setwd("C:/Users/admin/")
 
 venn.plot <- venn.diagram(
   x = list(
@@ -217,7 +217,7 @@ venn.plot <- venn.diagram(
 
 Data for sapplementary tables
 ```{r}
-setwd("C:/Users/admin/Desktop/протеомика/горох/таблицы/")
+#setwd("C:/Users/admin/")
 
 wild_tab <- protein_groups[, c(1:8)]
 culture_tab <- protein_groups[, c(1:4,10:14)]
