@@ -1,0 +1,20 @@
+---
+title: "Diff_exp_pea"
+output: html_document
+---
+
+Supplementary tables with differential expression data 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+setwd("C:/Users/admin/Desktop/протеомика/горох/таблицы и сапплементы/")
+
+up_reg_cult <- subset(pea_table, subset = pea_table$Highest.mean.condition == "culture")
+down_reg_cult <- subset(pea_table, subset = pea_table$Lowest.mean.condition == "culture")
+
+write.table(up_reg_cult[, -c(12:21)], file = "up_regulated_culture.xls", sep = "\t", row.names = F)
+write.table(down_reg_cult[, -c(12:21)], file = "down_regulated_culture.xls", sep = "\t", row.names = F)
+
+```

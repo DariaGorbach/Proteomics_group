@@ -1,0 +1,229 @@
+---
+title: "Pea_venn"
+output: html_document
+---
+
+Venn diagram for proteomic data: comparison between protein groups found in samples (Wild, Culture)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo = F}
+library(readxl)
+library(dplyr)
+library(stringr)
+library(VennDiagram)
+```
+
+```{r}
+protein_groups_full <-  read_excel("C:/Users/admin/Desktop/протеомные проекты/горох/whole_proteome/Peaa_coat_protgr.xlsx", col_names = T)
+
+colnames(protein_groups_full)
+```
+
+```{r}
+protein_groups <- protein_groups_full %>% dplyr::select("Group Description", "Protein Group ID", "# Proteins",  "# PSMs", "Found in Sample: [S10] F10: Sample, wild", "Found in Sample: [S9] F9: Sample, wild", "Found in Sample: [S8] F8: Sample, wild", "Found in Sample: [S7] F7: Sample, wild", "Found in Sample: [S6] F6: Sample, wild", "Found in Sample: [S5] F5: Sample, culture", "Found in Sample: [S4] F4: Sample, culture", "Found in Sample: [S3] F3: Sample, culture", "Found in Sample: [S2] F2: Sample, culture", "Found in Sample: [S1] F1: Sample, culture", "Found in Sample Group: wild", "Found in Sample Group: culture")
+colnames(protein_groups)[5:16] <- c("S10w","S9w", "S8w","S7w","S6w","S5c","S4c","S3c","S2c","S1c", "wild", "culture") 
+
+head(protein_groups)
+```
+
+```{r}
+protein_groups[sapply(protein_groups, is.character)] <- lapply(protein_groups[sapply(protein_groups, is.character)], as.factor)
+str(protein_groups)
+```
+
+```{r}
+levels(protein_groups[sapply(protein_groups, is.factor)]) <- c(levels(protein_groups[sapply(protein_groups, is.factor)]), "Found")
+protein_groups[, 5:16] <- lapply(protein_groups[,5:16], function(x) plyr::revalue(x, c("High"="Found")))
+protein_groups[, 5:16] <- lapply(protein_groups[,5:16], function(x) plyr::revalue(x, c("Medium"="Found")))
+levels(protein_groups[sapply(protein_groups, is.factor)]) <- c(levels(protein_groups[sapply(protein_groups, is.factor)]), "Not Found")
+
+head(protein_groups)
+```
+
+
+```{r}
+presented_protein_groups_10 <- as.list(subset(protein_groups, S10w == "Found", select = c("Group Description")))
+presented_protein_groups_9 <- as.list(subset(protein_groups, S9w == "Found", select = c("Group Description")))
+presented_protein_groups_8 <- as.list(subset(protein_groups, S8w == "Found", select = c("Group Description")))
+presented_protein_groups_7 <- as.list(subset(protein_groups, S7w == "Found", select = c("Group Description")))
+presented_protein_groups_6 <- as.list(subset(protein_groups, S6w == "Found", select = c("Group Description")))
+presented_protein_groups_5 <- as.list(subset(protein_groups, S5c == "Found", select = c("Group Description")))
+presented_protein_groups_4 <- as.list(subset(protein_groups, S4c == "Found", select = c("Group Description")))
+presented_protein_groups_3 <- as.list(subset(protein_groups, S3c == "Found", select = c("Group Description")))
+presented_protein_groups_2 <- as.list(subset(protein_groups, S2c == "Found", select = c("Group Description")))
+presented_protein_groups_1 <- as.list(subset(protein_groups, S1c == "Found", select = c("Group Description")))
+presented_protein_groups_wild <- as.list(subset(protein_groups, wild == "Found", select = c("Group Description")))
+presented_protein_groups_culture <- as.list(subset(protein_groups, culture == "Found", select = c("Group Description")))
+```
+
+Counting of protein groups for each sample
+```{r}
+ppg10 <- str_split_fixed(presented_protein_groups_10$`Group Description`, pattern = ";",n=Inf)
+ppg9 <- str_split_fixed(presented_protein_groups_9$`Group Description`, pattern = ";",n=Inf)
+ppg8 <- str_split_fixed(presented_protein_groups_8$`Group Description`, pattern = ";",n=Inf)
+ppg7 <- str_split_fixed(presented_protein_groups_7$`Group Description`, pattern = ";",n=Inf)
+ppg6 <- str_split_fixed(presented_protein_groups_6$`Group Description`, pattern = ";",n=Inf)   # ctrl+shft+C
+
+ppg5 <- str_split_fixed(presented_protein_groups_5$`Group Description`, pattern = ";",n=Inf)
+ppg4 <- str_split_fixed(presented_protein_groups_4$`Group Description`, pattern = ";",n=Inf)
+ppg3 <- str_split_fixed(presented_protein_groups_3$`Group Description`, pattern = ";",n=Inf)
+ppg2 <- str_split_fixed(presented_protein_groups_2$`Group Description`, pattern = ";",n=Inf)
+ppg1 <- str_split_fixed(presented_protein_groups_1$`Group Description`, pattern = ";",n=Inf)
+
+ppgW <- str_split_fixed(presented_protein_groups_wild$`Group Description`, pattern = ";",n=Inf)
+ppgC <- str_split_fixed(presented_protein_groups_culture$`Group Description`, pattern = ";",n=Inf)
+```
+
+```{r}
+ppg10 <- ppg10[, 1]
+ppg9 <- ppg9[, 1]
+ppg8 <- ppg8[, 1]
+ppg7 <- ppg7[, 1]
+ppg6 <- ppg6[, 1]  
+
+ppg5 <- ppg5[, 1]
+ppg4 <- ppg4[, 1]
+ppg3 <- ppg3[, 1]
+ppg2 <- ppg2[, 1]
+ppg1 <- ppg1[, 1]
+
+ppgW <- ppgW[, 1]
+ppgC <- ppgC[, 1]
+```
+
+Diagramm construction
+```{r FISH}
+setwd("C:/Users/admin/Desktop/протеомика/рыба/Venn_diagram/")
+
+venn.plot <- venn.diagram(
+  x = list(
+    "Fenol" = ppgF,
+    "Lysis" = ppgL
+  ),
+  filename = "Venn_protein_groups_prep_group.png",
+  col = "transparent",
+  fill = c("yellow2", "deepskyblue3"),
+  alpha = 0.50,
+  resolution = 300,
+  imagetype = "png",
+  label.col = "black",
+  cex = 2.5,
+  fontfamily ="Arial",
+  main.fontfamily = "serif",
+  fontface = "bold",
+  cat.col = "Black",
+  cat.cex = 2,
+  cat.fontfamily = "serif",
+  main = substitute(paste(italic("B"))),
+  main.cex = 2
+)
+
+```
+
+
+```{r, echo = F}
+setwd("C:/Users/admin/Desktop/протеомика/горох/venn_diag/")
+
+venn.plot <- venn.diagram(
+  x = list(
+    "Wild_6" = ppg6,
+    "Wild_7" = ppg7,
+    "Wild_8" = ppg8,
+    "Wild_9" = ppg9,
+    "Wild_10" = ppg10
+  ),
+  filename = "Venn_protein_groups_wild.png",
+  col = "transparent",
+  fill = c("firebrick3", "yellow2", "olivedrab3", "deepskyblue3", "orange2"),
+  alpha = 0.50,
+  resolution = 250,
+  imagetype = "png",
+  label.col = "black",
+  cex = 2.5,
+  fontfamily ="Arial",
+  main.fontfamily = "serif",
+  fontface = "bold",
+  #cat.pos = 90,
+  cat.col = "Black",
+  cat.cex = 2,
+  cat.fontfamily = "serif"
+  #main = substitute(paste(italic("B"))),
+  #main.cex = 2
+)
+```
+
+```{r}
+setwd("C:/Users/admin/Desktop/протеомика/горох/venn_diag/")
+
+venn.plot <- venn.diagram(
+  x = list(
+    "Cult_5" = ppg5,
+    "Cult_4" = ppg4,
+    "Cult_3" = ppg3,
+    "Cult_2" = ppg2,
+    "Cult_1" = ppg1
+  ),
+  filename = "Venn_protein_groups_culture.png",
+  col = "transparent",
+  fill = c("firebrick3", "yellow2", "olivedrab3", "deepskyblue3", "orange2"),
+  alpha = 0.50,
+  resolution = 250,
+  imagetype = "png",
+  label.col = "black",
+  cex = 2,
+  fontfamily ="Arial",
+  #main.fontfamily = "serif",
+  fontface = "bold",
+  #cat.pos = 0,
+  cat.col = "Black",
+  cat.cex = 2,
+  cat.fontfamily = "serif"
+  #main = substitute(paste(italic("B"))),
+  #main.cex = 2
+)
+```
+
+```{r}
+setwd("C:/Users/admin/Desktop/протеомика/горох/venn_diag/")
+
+venn.plot <- venn.diagram(
+  x = list(
+    "Wild group" = ppgW,
+    "Culture group" = ppgC
+  ),
+  filename = "Venn_protein_groups_pea_group.png",
+  col = "transparent",
+  fill = c("yellow2", "olivedrab3"),
+  alpha = 0.50,
+  resolution = 400,
+  imagetype = "png",
+  label.col = "black",
+  cex = 2.5,
+  fontfamily ="Arial",
+  main.fontfamily = "serif",
+  fontface = "bold",
+  cat.pos = 0,
+  cat.col = "Black",
+  cat.cex = 2,
+  cat.fontfamily = "serif"
+  #main = substitute(paste(italic("B"))),
+  #main.cex = 2
+)
+```
+
+
+Data for sapplementary tables
+```{r}
+setwd("C:/Users/admin/Desktop/протеомика/горох/таблицы/")
+
+wild_tab <- protein_groups[, c(1:8)]
+culture_tab <- protein_groups[, c(1:4,10:14)]
+
+write.table(wild_tab, "Supplementprgr_wild.xls", sep = "\t", dec = ",", eol = "\r", row.names = F)
+write.table(culture_tab, "Supplementprgr_cult.xls", sep = "\t", dec = ",", eol = "\r", row.names = F)
+write.table(protein_groups, "Supplementprgr_generals.xls", sep = "\t", dec = ",", eol = "\r", row.names = F)
+```
+
