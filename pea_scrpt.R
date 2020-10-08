@@ -2,6 +2,7 @@ library("Biostrings")
 library(stringr)
 library(dplyr)
 
+### добавление Uniprot ID к найденным белкам
 # Pisum_sativum_v1a_prot - фаста файл белковых последовательностей 
 pea_db <- readBStringSet("C:/Users/admin/Pisum_sativum_v1a_prot.fasta")
 pea_names = names(pea_db)
