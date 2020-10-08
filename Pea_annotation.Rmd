@@ -26,7 +26,7 @@ library(stringr)
 
 
 ```{r}
-merc_pea <- read.delim("C:/Users/admin/Desktop/протеомные проекты/горох/annotation/mercator.results.txt", header = T, sep = "\t")
+merc_pea <- read.delim("C:/Users/admin/", header = T, sep = "\t")
 merc_pea <- subset(merc_pea,!(merc_pea$TYPE==""))
 
 merc_pea$IDENTIFIER <- gsub(merc_pea$IDENTIFIER, pattern = "^.", replacement = "")
