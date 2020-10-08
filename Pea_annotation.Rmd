@@ -46,7 +46,7 @@ pea_table <- bin_test
 ```
 
 ```{r mercator 2}
-merc_pea_2 <- read.delim("C:/Users/admin/Desktop/протеомные проекты/горох/annotation/Daria.results.txt", header = T, sep = "\t")
+merc_pea_2 <- read.delim("C:/Users/admin/", header = T, sep = "\t")
 merc_pea_2 <- subset(merc_pea_2,!(merc_pea_2$TYPE==""))
 
 merc_pea_2$IDENTIFIER <- gsub(merc_pea_2$IDENTIFIER, pattern = "^.", replacement = "")
@@ -64,8 +64,8 @@ pea_table <- bin_test
 
 
 ```{r}
-blast_koala_pea <- read.delim("C:/Users/admin/Desktop/протеомные проекты/горох/annotation/user_ko.txt", header = F, sep = "\t")
-blast_koala_pea_add <- read.delim("C:/Users/admin/Desktop/протеомные проекты/горох/annotation/user_ko_definition.txt", header = F, sep = "\t")
+blast_koala_pea <- read.delim("C:/Users/admin/", header = F, sep = "\t")
+blast_koala_pea_add <- read.delim("C:/Users/admin/", header = F, sep = "\t")
 
 blast_koala_pea_add$V5 <- gsub(blast_koala_pea_add$V5, pattern = "^$", replacement = NA)
 blast_koala_pea_add$V2 <- gsub(blast_koala_pea_add$V2, pattern = "^$", replacement = NA)
@@ -86,7 +86,7 @@ pea_table <- test_blast
 ```
 
 ```{r}
-ngloc_pea <- read.delim("C:/Users/admin/Desktop/протеомика/горох/annotation/ngloc_pea.txt", header = T, sep = "\t")
+ngloc_pea <- read.delim("C:/Users/admin/", header = T, sep = "\t")
 ngloc_pea <- ngloc_pea[, c(1:3,5,7)]
 ngloc_pea$Sequence_ID <- tolower(ngloc_pea$Sequence_ID)
 
@@ -143,7 +143,7 @@ exp_frame$Description <- gsub(exp_frame$Description, pattern = "OS.*", replaceme
 
 ####### Cluster analysis ############
 ```{r echo=FALSE}
-pea_table_clust <- read.csv("C:/Users/admin/Desktop/протеомные проекты/горох/raw_tab/Pea_coat_comp.csv", header = T, sep = ";", dec = ",")[, -13]
+pea_table_clust <- read.csv("C:/Users/admin/", header = T, sep = ";", dec = ",")[, -13]
 
 boxplot(pea_table_clust[,12:20],col="skyblue",border = "black",main="No normalization",
         ylab="intensities",xlab="samples")
